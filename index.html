@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>WhatsApp Number Checker</title>
+<!-- Google Fonts for a modern look -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+<!-- Font Awesome for icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+<style>
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #74ebd5, #ACB6E5);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    margin: 0;
+  }
+  .container {
+    background-color: #fff;
+    padding: 40px 30px;
+    border-radius: 25px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+    max-width: 480px;
+    width: 100%;
+    transition: all 0.3s ease;
+  }
+  h2 {
+    text-align: center;
+    font-size: 2.2rem;
+    margin-bottom: 25px;
+    color: #222;
+    position: relative;
+    display: inline-block;
+    font-weight: 600;
+    letter-spacing: 1px;
+    animation: pulseText 2s infinite;
+  }
+  /* Updated header text with your name */
+  /* For clarity, I will update the CSS to include your name directly in the header content */
+
+  @keyframes pulseText {
+    0%, 100% { color: #222; }
+    50% { color: #ff4e50; }
+  }
+  form {
+    display: flex;
+    flex-direction: column;
+  }
+  label {
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #555;
+    font-size: 0.95rem;
+  }
+  input[type="tel"] {
+    padding: 14px 16px;
+    border: 2px solid #ddd;
+    border-radius: 12px;
+    font-size: 1rem;
+    margin-bottom: 20px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+  input[type="tel"]:focus {
+    border-color: #ff4e50;
+    box-shadow: 0 0 12px rgba(255,78,80,0.2);
+    outline: none;
+  }
+  button {
+    padding: 15px;
+    background: linear-gradient(135deg, #ff4e50, #ff6f61);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(255,78,80,0.2);
+  }
+  button:hover {
+    background: linear-gradient(135deg, #e04445, #e55b50);
+    transform: translateY(-2px);
+  }
+  /* Shake animation for button */
+  @keyframes shake {
+    0% { transform: translateX(0); }
+    20% { transform: translateX(-5px); }
+    40% { transform: translateX(5px); }
+    60% { transform: translateX(-5px); }
+    80% { transform: translateX(5px); }
+    100% { transform: translateX(0); }
+  }
+
+  /* Message styles with beautiful appearance */
+  .message {
+    margin-top: 25px;
+    padding: 15px 20px;
+    border-radius: 20px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 100%;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: all 0.4s ease;
+  }
+  /* Error and success styles with gradients */
+  .error {
+    background: linear-gradient(135deg, #ff4e50, #f9d423);
+    color: #fff;
+  }
+  .success {
+    background: linear-gradient(135deg, #00b09b, #96c93d);
+    color: #fff;
+  }
+  /* Show message */
+  .show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  /* Icon styles inside message */
+  .message-icon {
+    margin-right: 10px;
+    font-size: 22px;
+  }
+  /* Responsive adjustments */
+  @media (max-width: 500px) {
+    body {
+      padding: 10px;
+    }
+    .container {
+      padding: 30px 20px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <!-- Updated header with your name -->
+  <h2>SIRIMATH WHATSAPP NUMBER CHECK</h2>
+  <form id="checkerForm" onsubmit="event.preventDefault(); checkNumber();">
+    <label for="phone">නම්බරේ දෙන්න (Country Code + Number):</label>
+    <input type="tel" id="phone" placeholder="e.g. +94" required />
+    <button type="submit" id="checkBtn"><i class="fas fa-comment-dots"></i> Check & Chat</button>
+  </form>
+  <div class="message" id="message"></div>
+</div>
+
+<script>
+function checkNumber() {
+  const phoneInput = document.getElementById('phone').value.trim();
+  const messageDiv = document.getElementById('message');
+  const button = document.getElementById('checkBtn');
+
+  // Reset previous message
+  messageDiv.className = 'message';
+  messageDiv.innerHTML = '';
+
+  // Basic validation
+  const phoneNumber = phoneInput.replace(/\D/g, '');
+  if (phoneNumber.length < 10) {
+    showMessage('Please enter a valid phone number.', 'error', '❌');
+    return;
+  }
+
+  // Animate button shake
+  button.style.animation = 'shake 0.5s';
+  button.addEventListener('animationend', () => {
+    button.style.animation = '';
+  }, { once: true });
+
+  // Open WhatsApp chat
+  const whatsappUrl = `https://wa.me/${phoneNumber}`;
+  window.open(whatsappUrl, '_blank');
+
+  // Show success message
+  showMessage('Opening WhatsApp chat...', 'success', '✅');
+}
+
+// Function to display messages with icons and styles
+function showMessage(msg, type, icon) {
+  const messageDiv = document.getElementById('message');
+  messageDiv.className = 'message show ' + type;
+  messageDiv.innerHTML = `<span class="message-icon">${icon}</span> ${msg}`;
+
+  // Auto hide after 3 seconds
+  setTimeout(() => {
+    messageDiv.className = 'message';
+  }, 3000);
+}
+</script>
+
+</body>
+</html>
